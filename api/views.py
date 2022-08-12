@@ -43,6 +43,5 @@ def tle_by_id(request):
 @api_view(['GET'])
 def tle_by_name(request):
     satName = 'CARTOSAT-3'
-    response = requests.get(f'https://tle.ivanstanojevic.me/api/tle/?search={satName}').json()
-    print(response)
+    response = requests.get(f'https://tle.ivanstanojevic.me/api/tle?search={satName}').json()
     return Response(response)
