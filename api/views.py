@@ -31,6 +31,12 @@ def getRoutes(request):
             'body': None,
             'description': 'Returns TLE of satelite by it\'s name   [NOT WORKING CORRECTLY]'
         },
+        {
+            'Endpoint': 'satelliteInfo//',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns data of All satelite or by it\'s name'
+        },
     ]
     return Response(routes)
 
