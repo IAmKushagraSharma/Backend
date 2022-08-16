@@ -7,6 +7,7 @@ from .serializers import SatelliteInfoSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 
+
 api_key = 'GR71hb8u1YVl15UTOT5ud2fB12PeyPpNUQKd2XMR'
 
 
@@ -20,19 +21,19 @@ def getRoutes(request):
             'description': 'Returns TLE of satelites'
         },
         {
-            'Endpoint': 'tlebyid/',
+            'Endpoint': 'tlebyid/id',
             'method': 'GET',
             'body': None,
             'description': 'Returns TLE of satelite by it\'s id'
         },
         {
-            'Endpoint': 'tlebyname/',
+            'Endpoint': 'tlebyname/name',
             'method': 'GET',
             'body': None,
             'description': 'Returns TLE of satelite by it\'s name   [NOT WORKING CORRECTLY]'
         },
         {
-            'Endpoint': 'satelliteInfo//',
+            'Endpoint': 'satelliteInfo/',
             'method': 'GET',
             'body': None,
             'description': 'Returns data of All satelite or by it\'s name'
@@ -49,20 +50,17 @@ def get_tle(request):
 
 
 @api_view(['GET'])
-def tle_by_id(request):
-    satId = 44804
+def tle_by_id(request, id):
     response = requests.get(
-        f'https://tle.ivanstanojevic.me/api/tle/{satId}?api_key={api_key}').json()
+        f'https://tle.ivanstanojevic.me/api/tle/{id}?api_key={api_key}').json()
     return Response(response)
 
 
 @api_view(['GET'])
-def tle_by_name(request):
-    satName = 'CARTOSAT-3'
-    response = requests.get(f'https://tle.ivanstanojevic.me/api/tle/?search={satName}&api_key={api_key}')
+def tle_by_name(request, name):
+    response = requests.api.get(
+        f'https://tle.ivanstanojevic.me/api/tle/?search={name}&api_key={api_key}').json()
     return Response(response)
-
-
 
 
 class SatelliteInfoView(ListAPIView):

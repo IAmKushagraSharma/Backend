@@ -4,7 +4,7 @@ from . import views
 urlpatterns = [
     path('', views.getRoutes),
     path('gettle/', views.get_tle),
-    path('tlebyname/', views.tle_by_name),
-    path('tlebyid/', views.tle_by_id),
+    path('tlebyname/<str:name>/', views.tle_by_name),
+    path('tlebyid/<str:id>/', views.tle_by_id),
     path('satelliteInfo/', views.SatelliteInfoView.as_view())
 ]
