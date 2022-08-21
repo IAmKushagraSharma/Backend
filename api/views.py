@@ -2,14 +2,15 @@ import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
-from .models import SatelliteInfo
+from .models import SatelliteInfo, SatNameId
 from .serializers import SatelliteInfoSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+from django.http import HttpResponse
 
 
-api_key = 'GR71hb8u1YVl15UTOT5ud2fB12PeyPpNUQKd2XMR'
-
+api_key = 'cE1XhcupGwKMVPa0b7GJ3QbE6aqjkRsfOn8nEB6L'
+url = 'https://tle.ivanstanojevic.me/api/tle/?api_key=cE1XhcupGwKMVPa0b7GJ3QbE6aqjkRsfOn8nEB6L&page-size=100'
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -30,7 +31,7 @@ def getRoutes(request):
             'Endpoint': 'tlebyname/name',
             'method': 'GET',
             'body': None,
-            'description': 'Returns TLE of satelite by it\'s name   [NOT WORKING CORRECTLY]'
+            'description': 'Returns TLE of satelite by it\'s name '
         },
         {
             'Endpoint': 'satelliteInfo/',
@@ -40,6 +41,15 @@ def getRoutes(request):
         },
     ]
     return Response(routes)
+
+
+
+def get_Name_id(request):
+    response = requests.get('http://127.0.0.1:9000/data')
+    data = response.json()['member']
+    for satdata in data:
+        SatNameId.objects.create(Name=satdata['name'], SatId=satdata['@id'].strip('https://tle.ivanstanojevic.me/api/tle/'))
+    return HttpResponse('<h1>Modles Updated!!</h1>')
 
 
 @api_view(['GET'])
@@ -58,8 +68,9 @@ def tle_by_id(request, id):
 
 @api_view(['GET'])
 def tle_by_name(request, name):
-    response = requests.api.get(
-        f'https://tle.ivanstanojevic.me/api/tle/?search={name}&api_key={api_key}').json()
+    Id = SatNameId.objects.filter(Name=name)[0].SatId
+    if(Id):
+        response = requests.api.get(f'https://tle.ivanstanojevic.me/api/tle/{Id}?&api_key={api_key}').json()
     return Response(response)
 
 

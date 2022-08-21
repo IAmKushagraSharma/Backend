@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import SatelliteInfo
+from .models import *
 # Register your models here.
 
 admin.site.register(SatelliteInfo)
+admin.site.register(SatNameId)

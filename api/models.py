@@ -22,3 +22,9 @@ class SatelliteInfo(models.Model):
 
 
 
+class SatNameId(models.Model):
+    Name = models.CharField(max_length=50)
+    SatId = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return self.Name

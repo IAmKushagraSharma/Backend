@@ -6,5 +6,6 @@ urlpatterns = [
     path('gettle/', views.get_tle),
     path('tlebyname/<str:name>/', views.tle_by_name),
     path('tlebyid/<str:id>/', views.tle_by_id),
-    path('satelliteInfo/', views.SatelliteInfoView.as_view())
+    path('satelliteInfo/', views.SatelliteInfoView.as_view()),
+    path('get_Name_id/', views.get_Name_id),
 ]
