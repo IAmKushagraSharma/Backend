@@ -74,8 +74,26 @@ def tle_by_name(request, name):
     return Response(response)
 
 
-class SatelliteInfoView(ListAPIView):
-    queryset = SatelliteInfo.objects.all()
-    serializer_class = SatelliteInfoSerializer
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['id', 'Name']
+@api_view(['GET'])
+def satellite_list(request):
+    if request.method == 'GET':
+        satellite = SatelliteInfo.objects.all()
+        serializer = SatelliteInfoSerializer(satellite, many=True)
+        return Response(serializer.data)
+@api_view(['GET'])
+def satellite_detail(request,name):
+
+    try:
+        satellite = SatelliteInfo.objects.get(pk=name)
+        print(satellite.Name)
+    except satellite.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method=='GET':
+        sensor=Sensor.objects.filter(SatelliteName=satellite.Name)
+        print(sensor)
+
+
+        serializer = SensorSerializer(sensor,many=True)
+        print(serializer.data)
+        return Response(serializer.data)

@@ -1,9 +1,14 @@
 from rest_framework import serializers
 from api import models
 
-class SatelliteInfoSerializer(serializers.ModelSerializer):
-    """Serializes a user profile object"""
 
+class SatelliteInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SatelliteInfo
-        fields = '__all__'
+        fields = ['Name']
+
+
+class SensorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Sensor
+        fields = ['SensorName']
