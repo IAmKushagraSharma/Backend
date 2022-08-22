@@ -2,8 +2,8 @@ import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
-from .models import SatelliteInfo, SatNameId,Sensor
-from .serializers import SatelliteInfoSerializer,SensorSerializer
+from .models import SatelliteInfo, SatNameId, Sensor
+from .serializers import SatelliteInfoSerializer, SensorSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.http import HttpResponse
@@ -99,4 +99,15 @@ def satellite_detail(request, name):
     if request.method == 'GET':
         sensor = Sensor.objects.filter(SatelliteName=satellite.Name)
         serializer = SensorSerializer(sensor, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def sensor_detail(request, name, sensor):
+    print(pk, sm)
+
+    if request.method == 'GET':
+        sensor = Sensor.objects.filter(Q(SatelliteName=name) & Q(SensorName=sensor))
+        serializer = SensorallSerializer(sensor, many=True)
+        print(serializer.data)
         return Response(serializer.data)

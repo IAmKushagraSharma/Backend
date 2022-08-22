@@ -9,5 +9,6 @@ urlpatterns = [
     path('get_Name_id/', views.get_Name_id),
     path('satellite/', views.satellite_list),
     path('satellite/<name>', views.satellite_detail),
+    path('satellite/<name>/<sensor>', views.satellite_detail),
 
 ]

@@ -12,3 +12,9 @@ class SensorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Sensor
         fields = ['SensorName']
+class SensorallSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = models.Sensor
+        fields = '__all__'
