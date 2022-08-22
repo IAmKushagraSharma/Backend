@@ -45,6 +45,12 @@ def getRoutes(request):
             'body': None,
             'description': 'Returns data of All sensor of given satellite'
         },
+        {
+            'Endpoint': 'satellite/<name>/<sensor>',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns data of selected sensor of given satellite'
+        },
     ]
     return Response(routes)
 
