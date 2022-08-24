@@ -3,15 +3,15 @@ from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import *
-from .serializers import SatelliteInfoSerializer, SensorSerializer
+from .serializers import *
 from rest_framework.permissions import AllowAny
 from .serializers import RegisterSerializer
 from django.contrib.auth.models import User
 from rest_framework import generics
-
-
+from django.db.models import Q
 
 api_key = 'cE1XhcupGwKMVPa0b7GJ3QbE6aqjkRsfOn8nEB6L'
+
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -52,6 +52,24 @@ def getRoutes(request):
             'body': None,
             'description': 'Returns data of selected sensor of given satellite'
         },
+        {
+            'Endpoint': 'sensor/',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns list of sensor'
+        },
+        {
+            'Endpoint': 'sensor/<name>',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns list of satellite related to given sensor'
+        },
+        {
+            'Endpoint': 'sensor/<name>/<sensor>',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns data of selected sensor & satellite'
+        },
     ]
     return Response(routes)
 
@@ -59,8 +77,6 @@ def getRoutes(request):
 def index(request):
     params = {}
     return render(request, 'index.html', params)
-
-
 
 
 class RegisterUserAPIView(generics.CreateAPIView):
@@ -103,7 +119,7 @@ def satellite_list(request):
 def satellite_detail(request, name):
     try:
         satellite = SatelliteInfo.objects.get(pk=name)
-        print(satellite.Name)
+
     except satellite.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -115,11 +131,25 @@ def satellite_detail(request, name):
 
 @api_view(['GET'])
 def sensor_detail(request, name, sensor):
-    print(pk, sm)
-
     if request.method == 'GET':
         sensor = Sensor.objects.filter(
-            Q(SatelliteName=name) & Q(SensorName=sensor))
+            (Q(SatelliteName=name) & Q(SensorName=sensor)) | (Q(SensorName=name) & Q(SatelliteName=sensor)))
         serializer = SensorallSerializer(sensor, many=True)
-        print(serializer.data)
+
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def sensor_list(request):
+    if request.method == 'GET':
+        sensor = Sensor.objects.all()
+        serializer = SensorSerializer(sensor, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def satellite_name(request, name):
+    if request.method == 'GET':
+        sensor = Sensor.objects.filter(SensorName=name)
+        serializer = SatelliteNameSerializer(sensor, many=True)
         return Response(serializer.data)

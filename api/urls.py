@@ -12,11 +12,12 @@ urlpatterns = [
     path('tlebyid/<str:id>/', views.tle_by_id),
     path('satellite/', views.satellite_list),
     path('satellite/<name>', views.satellite_detail),
-
     path('satellite/<name>/<sensor>', views.sensor_detail),
-    #path('application/',views.satellite_application)
+    path('sensor/', views.sensor_list),
+    path('sensor/<name>', views.satellite_name),
+    path('sensor/<name>/<sensor>', views.sensor_detail),
 
-    path('satellite/<name>/<sensor>', views.satellite_detail),
+
 ]
 
 
