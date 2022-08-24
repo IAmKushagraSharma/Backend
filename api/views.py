@@ -2,12 +2,12 @@ import requests
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView
-from .models import SatelliteInfo, SatNameId, Sensor
-from .serializers import SatelliteInfoSerializer, SensorSerializer
+from .models import *
+from .serializers import *
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from django.http import HttpResponse
-
+from django.db.models import Q
 api_key = 'cE1XhcupGwKMVPa0b7GJ3QbE6aqjkRsfOn8nEB6L'
 url = 'https://tle.ivanstanojevic.me/api/tle/?api_key=cE1XhcupGwKMVPa0b7GJ3QbE6aqjkRsfOn8nEB6L&page-size=100'
 
@@ -98,7 +98,7 @@ def satellite_list(request):
 def satellite_detail(request, name):
     try:
         satellite = SatelliteInfo.objects.get(pk=name)
-        print(satellite.Name)
+
     except satellite.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -110,10 +110,12 @@ def satellite_detail(request, name):
 
 @api_view(['GET'])
 def sensor_detail(request, name, sensor):
-    print(pk, sm)
+
 
     if request.method == 'GET':
         sensor = Sensor.objects.filter(Q(SatelliteName=name) & Q(SensorName=sensor))
         serializer = SensorallSerializer(sensor, many=True)
-        print(serializer.data)
         return Response(serializer.data)
+
+
+

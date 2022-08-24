@@ -4,4 +4,5 @@ from .models import *
 
 admin.site.register(SatelliteInfo)
 admin.site.register(Sensor)
+
 admin.site.register(SatNameId)
