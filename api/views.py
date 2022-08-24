@@ -1,16 +1,17 @@
 import requests
+from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView
-from .models import SatelliteInfo, SatNameId, Sensor
+from .models import *
 from .serializers import SatelliteInfoSerializer, SensorSerializer
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from django.http import HttpResponse
+from rest_framework.permissions import AllowAny
+from .serializers import RegisterSerializer
+from django.contrib.auth.models import User
+from rest_framework import generics
+
+
 
 api_key = 'cE1XhcupGwKMVPa0b7GJ3QbE6aqjkRsfOn8nEB6L'
-url = 'https://tle.ivanstanojevic.me/api/tle/?api_key=cE1XhcupGwKMVPa0b7GJ3QbE6aqjkRsfOn8nEB6L&page-size=100'
-
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -55,13 +56,16 @@ def getRoutes(request):
     return Response(routes)
 
 
-def get_Name_id(request):
-    response = requests.get('http://127.0.0.1:9000/data')
-    data = response.json()['member']
-    for satdata in data:
-        SatNameId.objects.create(Name=satdata['name'],
-                                 SatId=satdata['@id'].strip('https://tle.ivanstanojevic.me/api/tle/'))
-    return HttpResponse('<h1>Modles Updated!!</h1>')
+def index(request):
+    params = {}
+    return render(request, 'index.html', params)
+
+
+
+
+class RegisterUserAPIView(generics.CreateAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
 
 
 @api_view(['GET'])
@@ -82,7 +86,8 @@ def tle_by_id(request, id):
 def tle_by_name(request, name):
     Id = SatNameId.objects.filter(Name=name)[0].SatId
     if (Id):
-        response = requests.api.get(f'https://tle.ivanstanojevic.me/api/tle/{Id}?&api_key={api_key}').json()
+        response = requests.api.get(
+            f'https://tle.ivanstanojevic.me/api/tle/{Id}?&api_key={api_key}').json()
     return Response(response)
 
 
@@ -113,7 +118,8 @@ def sensor_detail(request, name, sensor):
     print(pk, sm)
 
     if request.method == 'GET':
-        sensor = Sensor.objects.filter(Q(SatelliteName=name) & Q(SensorName=sensor))
+        sensor = Sensor.objects.filter(
+            Q(SatelliteName=name) & Q(SensorName=sensor))
         serializer = SensorallSerializer(sensor, many=True)
         print(serializer.data)
         return Response(serializer.data)
