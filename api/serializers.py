@@ -27,8 +27,7 @@ class SensorallSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-<<<<<<< HEAD
-=======
+
 class UserSerializer(serializers.ModelSerializer):
   class Meta:
     model = User
@@ -66,4 +65,4 @@ class RegisterSerializer(serializers.ModelSerializer):
     user.save()
     return user
 
->>>>>>> origin/main
+

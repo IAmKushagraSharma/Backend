@@ -12,11 +12,11 @@ urlpatterns = [
     path('tlebyid/<str:id>/', views.tle_by_id),
     path('satellite/', views.satellite_list),
     path('satellite/<name>', views.satellite_detail),
-<<<<<<< HEAD
+
     path('satellite/<name>/<sensor>', views.sensor_detail),
     #path('application/',views.satellite_application)
-=======
+
     path('satellite/<name>/<sensor>', views.satellite_detail),
 ]
->>>>>>> origin/main
+
 
