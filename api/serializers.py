@@ -18,6 +18,11 @@ class SensorSerializer(serializers.ModelSerializer):
         model = models.Sensor
         fields = ['SensorName']
 
+class ApplicationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Sensor
+        fields = ['application1','application2','application3']
+
 
 class SensorallSerializer(serializers.ModelSerializer):
     class Meta:

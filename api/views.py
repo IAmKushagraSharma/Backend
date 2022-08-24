@@ -70,6 +70,30 @@ def getRoutes(request):
             'body': None,
             'description': 'Returns data of selected sensor & satellite'
         },
+        {
+            'Endpoint': 'application/',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns list of application'
+        },
+        {
+            'Endpoint': 'application/<applicationname>',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns list of sensor for given application '
+        },
+        {
+            'Endpoint': 'application/<applicationname>/<sensorname>',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns list of satellite for given application & sensor '
+        },
+        {
+            'Endpoint': 'application/<applicationname>/<sensorname>/<satellite>',
+            'method': 'GET',
+            'body': None,
+            'description': 'Returns data of sensor for given appication sensor and satellite'
+        },
     ]
     return Response(routes)
 
@@ -152,4 +176,34 @@ def satellite_name(request, name):
     if request.method == 'GET':
         sensor = Sensor.objects.filter(SensorName=name)
         serializer = SatelliteNameSerializer(sensor, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def application_list(request):
+    if request.method == 'GET':
+        sensor = Sensor.objects.all()
+        serializer = ApplicationSerializer(sensor, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def application_to_sensor(request, applicationname):
+    if request.method == 'GET':
+        sensor = Sensor.objects.filter(Q(application1=applicationname) | Q(application2=applicationname) | Q(application3=applicationname))
+        serializer = SensorSerializer(sensor, many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def application_to_sensor_to_satellite(request, applicationname,sensorname):
+    if request.method == 'GET':
+        sensor = Sensor.objects.filter((Q(application1=applicationname) | Q(application2=applicationname) | Q(application3=applicationname)) &(Q(SensorName=sensorname)))
+        serializer = SatelliteNameSerializer(sensor, many=True)
+        return Response(serializer.data)
+
+@api_view(['GET'])
+def application_to_sensor_to_satellite_to_sensor_detail(request, applicationname,sensorname,satellite):
+    if request.method == 'GET':
+        sensor = Sensor.objects.filter((Q(application1=applicationname) | Q(application2=applicationname) | Q(application3=applicationname)) &(Q(SensorName=sensorname)) &(Q(SatelliteName=satellite)))
+        serializer = SensorallSerializer(sensor, many=True)
         return Response(serializer.data)

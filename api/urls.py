@@ -16,6 +16,10 @@ urlpatterns = [
     path('sensor/', views.sensor_list),
     path('sensor/<name>', views.satellite_name),
     path('sensor/<name>/<sensor>', views.sensor_detail),
+    path('application/', views.application_list),
+    path('application/<applicationname>', views.application_to_sensor),
+    path('application/<applicationname>/<sensorname>', views.application_to_sensor_to_satellite),
+    path('application/<applicationname>/<sensorname>/<satellite>', views.application_to_sensor_to_satellite_to_sensor_detail),
 
 
 ]
