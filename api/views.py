@@ -95,6 +95,12 @@ def getRoutes(request):
             'body': None,
             'description': 'Returns data of sensor for given appication sensor and satellite'
         },
+        {
+            'Endpoint': 'orbital_elements/<satellite>',
+            'method': 'GET',
+            'body': None,
+            'description': 'Get orbital elements for a given satellite'
+        },
     ]
     return Response(routes)
 
