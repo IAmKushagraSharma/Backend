@@ -4,7 +4,7 @@ from django.db import models
 class SatelliteInfo(models.Model):
     def __str__(self):
         return self.Name
-
+    id=models.IntegerField(default=0)
     Name = models.CharField(max_length=200, primary_key=True, default='NA')
     OrbitType = models.CharField(max_length=200, blank=True, null=True)
     OrbitDay = models.FloatField(max_length=200, blank=True, null=True)

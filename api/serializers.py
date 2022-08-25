@@ -10,7 +10,7 @@ from django.contrib.auth.password_validation import validate_password
 class SatelliteInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.SatelliteInfo
-        fields = ['Name']
+        fields = '__all__'
 
 
 class SensorSerializer(serializers.ModelSerializer):
