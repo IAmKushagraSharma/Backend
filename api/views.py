@@ -9,6 +9,7 @@ from .serializers import RegisterSerializer
 from django.contrib.auth.models import User
 from rest_framework import generics
 from django.db.models import Q
+from tletools import TLE
 
 api_key = 'cE1XhcupGwKMVPa0b7GJ3QbE6aqjkRsfOn8nEB6L'
 
@@ -98,9 +99,31 @@ def getRoutes(request):
     return Response(routes)
 
 
-def index(request):
-    params = {}
-    return render(request, 'index.html', params)
+@api_view(['GET'])
+def orbital_elements(request, satName):
+    data = requests.get(
+        f'https://tle-backend.herokuapp.com/tlebyname/{satName}').json()
+
+    tle_lines = [data["name"], data["line1"], data["line2"]]
+
+    tle = TLE.from_lines(*tle_lines)
+    orb = tle.to_orbit()
+
+    Data = [
+        {"semimajor_axis" : orb.a},
+        {"orbit_period" : orb.period},
+        {"eccentricity" : orb.ecc},
+        {"argument_of_perigree" : orb.argp},
+        {"inclination" : orb.inc},
+        {"mean_motion" : orb.n},
+        {"eccentricity_vector" : orb.e_vec},
+        {"true_anomaly" : orb.nu},
+        {"raan" : orb.raan},
+        {"epoch" : orb.epoch},
+        {"argument_of_latitude" : orb.arglat},
+    ]
+
+    return Response(str(Data))
 
 
 class RegisterUserAPIView(generics.CreateAPIView):
