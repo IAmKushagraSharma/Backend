@@ -16,7 +16,7 @@ class SatelliteInfoSerializer(serializers.ModelSerializer):
 class SensorSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Sensor
-        fields = ['SensorName']
+        fields = ['id','SensorName']
 
 class ApplicationSerializer(serializers.ModelSerializer):
     class Meta:
