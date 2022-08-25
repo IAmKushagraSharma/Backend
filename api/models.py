@@ -18,6 +18,7 @@ class Sensor(models.Model):
 
     SensorName = models.CharField(max_length=200, blank=True, null=True)
     SatelliteName = models.CharField(max_length=200, blank=True, null=True)
+    SatelliteID=models.IntegerField(default=0)
     Swath = models.FloatField(default=0)
     TiltFore = models.FloatField(default=0)
     TiltAft = models.FloatField(default=0)
