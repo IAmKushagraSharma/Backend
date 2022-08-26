@@ -5,7 +5,7 @@ from .views import RegisterUserAPIView
 
 urlpatterns = [
     path('', views.getRoutes),
-    path('register/',RegisterUserAPIView.as_view()),
+	path('register/',RegisterUserAPIView.as_view()),
     path('gettle/', views.get_tle),
     path('tlebyname/<str:name>/', views.tle_by_name),
     path('tlebyid/<str:id>/', views.tle_by_id),
@@ -18,6 +18,8 @@ urlpatterns = [
     path('sensor/<name>/<sensor>', views.sensor_detail),
     path('application/', views.application_list),
     path('application/<applicationname>', views.application_to_sensor_details),
+    path('orbital_elements_by_id', views.orbital_elements_by_id),
+    path('orbital_elements_by_name', views.orbital_elements_by_name),
 
 
 

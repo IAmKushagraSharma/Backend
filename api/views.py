@@ -1,4 +1,5 @@
 import requests
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -89,32 +90,35 @@ def getRoutes(request):
     return Response(routes)
 
 
+# @api_view(['GET'])
+# def orbital_elements(request, satName):
+#     data = requests.get(f'https://tle-backend.herokuapp.com/tlebyname/{satName}').json()
+
+#     tle_lines = [data["name"], data["line1"], data["line2"]]
+
+#     tle = TLE.from_lines(*tle_lines)
+#     orb = tle.to_orbit()
+
+#     Data = [
+#         {"semimajor_axis" : orb.a},
+#         {"orbit_period" : orb.period},
+#         {"eccentricity" : orb.ecc},
+#         {"argument_of_perigree" : orb.argp},
+#         {"inclination" : orb.inc},
+#         {"mean_motion" : orb.n},
+#         {"eccentricity_vector" : orb.e_vec},
+#         {"true_anomaly" : orb.nu},
+#         {"raan" : orb.raan},
+#         {"epoch" : orb.epoch},
+#         {"argument_of_latitude" : orb.arglat},
+#     ]
+
+#     return Response(str(Data))
+
 @api_view(['GET'])
 def orbital_elements(request, satName):
-    data = requests.get(
-        f'https://tle-backend.herokuapp.com/tlebyname/{satName}').json()
-
-    tle_lines = [data["name"], data["line1"], data["line2"]]
-
-    tle = TLE.from_lines(*tle_lines)
-    orb = tle.to_orbit()
-
-    Data = [
-        {"semimajor_axis" : orb.a},
-        {"orbit_period" : orb.period},
-        {"eccentricity" : orb.ecc},
-        {"argument_of_perigree" : orb.argp},
-        {"inclination" : orb.inc},
-        {"mean_motion" : orb.n},
-        {"eccentricity_vector" : orb.e_vec},
-        {"true_anomaly" : orb.nu},
-        {"raan" : orb.raan},
-        {"epoch" : orb.epoch},
-        {"argument_of_latitude" : orb.arglat},
-    ]
-
-    return Response(str(Data))
-
+    data = requests.get(f'https://celestrak.org/NORAD/elements/gp.php?NAME={satName}&FORMAT=json').json()
+    return Response(data)
 
 class RegisterUserAPIView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
@@ -130,19 +134,27 @@ def get_tle(request):
 
 @api_view(['GET'])
 def tle_by_id(request, id):
-    response = requests.get(
-        f'https://tle.ivanstanojevic.me/api/tle/{id}?api_key={api_key}').json()
+    response = requests.get(f'https://celestrak.org/NORAD/elements/gp.php?CATNR={id}&FORMAT=2LE')
     return Response(response)
 
 
 @api_view(['GET'])
 def tle_by_name(request, name):
-    Id = SatNameId.objects.filter(Name=name)[0].SatId
-    if (Id):
-        response = requests.api.get(
-            f'https://tle.ivanstanojevic.me/api/tle/{Id}?&api_key={api_key}').json()
+    response = requests.get(f'https://celestrak.org/NORAD/elements/gp.php?NAME={name}&FORMAT=2LE')
+    print(response)
     return Response(response)
 
+
+@api_view(['GET'])
+def orbital_elements_by_id(request, id):
+    response = requests.get(f'https://celestrak.org/NORAD/elements/gp.php?CATNR={id}&FORMAT=json').json()
+    return Response(response)
+
+
+@api_view(['GET'])
+def orbital_elements_by_name(request, name):
+    response = requests.get(f'https://celestrak.org/NORAD/elements/gp.php?NAME={name}&FORMAT=json').json()
+    return Response(response)
 
 @api_view(['GET'])
 def satellite_list(request):
